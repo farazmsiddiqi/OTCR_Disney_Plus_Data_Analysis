@@ -108,6 +108,3 @@ averagesRT[0] = avg(RottenTomatoes, Netflix, counterNetflixRT, rtTotalNetflix)
 averagesRT[1] = avg(RottenTomatoes, Hulu, counterHuluRT, rtTotalHulu)
 averagesRT[2] = avg(RottenTomatoes, DisneyPlus, counterDisneyRT, rtTotalDisney)
 averagesRT[3] = avg(RottenTomatoes, PrimeVideo, counterPrimeVideoRT, rtTotalPrimeVideo)
-
-print(averagesIMDb)
-print(averagesRT)
