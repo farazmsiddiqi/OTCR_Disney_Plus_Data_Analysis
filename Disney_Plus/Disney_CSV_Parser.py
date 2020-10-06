@@ -38,6 +38,23 @@ counterHuluRT = 0
 counterDisneyRT = 0
 counterPrimeVideoRT = 0
 
+#averages for each streaming service
+imdbAvgNetflix = 0
+imdbAvgHulu = 0
+imdbAvgDisney = 0
+imdbAvgPrimeVideo = 0
+
+#averages for each streaming service
+rtAvgNetflix = 0
+rtAvgHulu = 0
+rtAvgDisney = 0
+rtAvgPrimeVideo = 0
+
+#averages per streaming service in lists
+averagesIMDb = [imdbAvgNetflix, imdbAvgHulu, imdbAvgDisney, imdbAvgPrimeVideo]
+averagesRT = [rtAvgNetflix, rtAvgHulu, rtAvgDisney, rtAvgPrimeVideo]
+
+
 
 with open(filename) as f: #opened file
     reader = csv.reader(f)
@@ -58,114 +75,39 @@ with open(filename) as f: #opened file
         DisneyPlus.append(int(row[9]))
         Tv_Type.append(int(row[10]))
 
-    for i in range(len(IMDb)): # turns IMDb list into float vals
-        if IMDb[i] == "":
-            continue
-        IMDb[i] = float(IMDb[i])
+for i in range(len(IMDb)): # turns IMDb list into float vals
+    if IMDb[i] == "":
+        continue
+    IMDb[i] = float(IMDb[i])
 
-    for i in range(len(RottenTomatoes)): # turns RottenTomatoes into int vals
-        if RottenTomatoes[i] == "":
-            continue
-        if "%" in RottenTomatoes[i]:
-            RottenTomatoes[i] = RottenTomatoes[i][:-1]
-        RottenTomatoes[i] = int(RottenTomatoes[i])
+for i in range(len(RottenTomatoes)): # turns RottenTomatoes into int vals
+    if RottenTomatoes[i] == "":
+        continue
+    if "%" in RottenTomatoes[i]:
+        RottenTomatoes[i] = RottenTomatoes[i][:-1]
+    RottenTomatoes[i] = int(RottenTomatoes[i])
 
 
-    for i in range(len(IMDb)): # creates (for Neflix) total: a val used for computing avgs, and counterx: a val used to subtract from x length when computing avgs
-        if Netflix[i] == 1:
-            if IMDb[i] == "":
-                counterNetflixIMDb += 1
+def avg(ratingList, streamingList, counterStream, ratingTotal):
+    for i in range(len(ratingList)):  # creates (for Neflix) total: a val used for computing avgs, and counterx: a val used to subtract from x length when computing avgs
+        if streamingList[i] == 1:
+            if ratingList[i] == "":
+                counterStream += 1
                 continue
-            imdbTotalNetflix += IMDb[i]
+            ratingTotal += ratingList[i]
         else:
-            counterNetflixIMDb += 1
+            counterStream += 1
+    return ratingTotal / (len(ratingList) - counterStream)
 
-    for i in range(len(IMDb)): # same as above but for Hulu
-        if Hulu[i] == 1:
-            if IMDb[i] == "":
-                counterHuluIMDb += 1
-                continue
-            imdbTotalHulu += IMDb[i]
-        else:
-            counterHuluIMDb += 1
+averagesIMDb[0] = avg(IMDb, Netflix, counterNetflixIMDb, imdbTotalNetflix)
+averagesIMDb[1] = avg(IMDb, Hulu, counterHuluIMDb, imdbTotalHulu)
+averagesIMDb[2] = avg(IMDb, DisneyPlus, counterDisneyRT, imdbTotalDisney)
+averagesIMDb[3] = avg(IMDb, PrimeVideo, counterPrimeVideoIMDb, imdbTotalPrimeVideo)
 
-    for i in range(len(IMDb)): # same as above but for DisneyPlus
-        if DisneyPlus[i] == 1:
-            if IMDb[i] == "":
-                counterDisneyIMDb += 1
-                continue
-            imdbTotalDisney += IMDb[i]
-        else:
-            counterDisneyIMDb += 1
+averagesRT[0] = avg(RottenTomatoes, Netflix, counterNetflixRT, rtTotalNetflix)
+averagesRT[1] = avg(RottenTomatoes, Hulu, counterHuluRT, rtTotalHulu)
+averagesRT[2] = avg(RottenTomatoes, DisneyPlus, counterDisneyRT, rtTotalDisney)
+averagesRT[3] = avg(RottenTomatoes, PrimeVideo, counterPrimeVideoRT, rtTotalPrimeVideo)
 
-    for i in range(len(IMDb)): # same as above but for PrimeVideo
-        if PrimeVideo[i] == 1:
-            if IMDb[i] == "":
-                counterPrimeVideoIMDb += 1
-                continue
-            imdbTotalPrimeVideo += IMDb[i]
-        else:
-            counterPrimeVideoIMDb += 1
-
-    for i in range(len(RottenTomatoes)): # creates (for Neflix) total: a val used for computing avgs, and counterx: a val used to subtract from x length when computing avgs
-        if Netflix[i] == 1:
-            if RottenTomatoes[i] == "":
-                counterNetflixRT += 1
-                continue
-            rtTotalNetflix += RottenTomatoes[i]
-        else:
-            counterNetflixRT += 1
-
-    for i in range(len(RottenTomatoes)): # same as above but for Hulu
-        if Hulu[i] == 1:
-            if RottenTomatoes[i] == "":
-                counterHuluRT += 1
-                continue
-            rtTotalHulu += RottenTomatoes[i]
-        else:
-            counterHuluRT += 1
-
-    for i in range(len(RottenTomatoes)): # same as above but for DisneyPlus
-        if DisneyPlus[i] == 1:
-            if RottenTomatoes[i] == "":
-                counterDisneyRT += 1
-                continue
-            rtTotalDisney += RottenTomatoes[i]
-        else:
-            counterDisneyRT += 1
-
-    for i in range(len(RottenTomatoes)): # same as above but for PrimeVideo
-        if PrimeVideo[i] == 1:
-            if RottenTomatoes[i] == "":
-                counterPrimeVideoRT += 1
-                continue
-            rtTotalPrimeVideo += RottenTomatoes[i]
-        else:
-            counterPrimeVideoRT += 1
-
-#averages for each streaming service (Prime Video has highest IMDb avg)
-imdbAvgNetflix = imdbTotalNetflix / (len(IMDb) - counterNetflixIMDb)
-imdbAvgHulu = imdbTotalHulu / (len(IMDb) - counterHuluIMDb)
-imdbAvgDisney = imdbTotalDisney / (len(IMDb) - counterDisneyIMDb)
-imdbAvgPrimeVideo = imdbTotalPrimeVideo / (len(IMDb) - counterPrimeVideoIMDb)
-
-#averages for each streaming service (DisneyPlus has highest Rotten Tomatoes avg)
-rtAvgNetflix = rtTotalNetflix / (len(RottenTomatoes) - counterNetflixRT)
-rtAvgHulu = rtTotalHulu / (len(RottenTomatoes) - counterHuluRT)
-rtAvgDisney = rtTotalDisney / (len(RottenTomatoes) - counterDisneyRT)
-rtAvgPrimeVideo = rtTotalPrimeVideo / (len(RottenTomatoes) - counterPrimeVideoRT)
-
-print("\nIMDb")
-print("netflix: " + str(imdbAvgNetflix))
-print("hulu: " + str(imdbAvgHulu))
-print("Disney: " + str(imdbAvgDisney))
-print("Prime Video: " + str(imdbAvgPrimeVideo))
-
-print("\nRotten Tomatoes")
-print("netflix: " + str(rtAvgNetflix))
-print("hulu: " + str(rtAvgHulu))
-print("Disney: " + str(rtAvgDisney))
-print("Prime Video: " + str(rtAvgPrimeVideo))
-
-plt.plot([1,2,3] , [2,4,5])
-plt.show()
+print(averagesIMDb)
+print(averagesRT)
