@@ -53,6 +53,7 @@ rtAvgPrimeVideo = 0
 #averages per streaming service in lists
 averagesIMDb = [imdbAvgNetflix, imdbAvgHulu, imdbAvgDisney, imdbAvgPrimeVideo]
 averagesRT = [rtAvgNetflix, rtAvgHulu, rtAvgDisney, rtAvgPrimeVideo]
+averagesNormalized = [0, 0, 0, 0]
 
 
 
@@ -65,7 +66,7 @@ with open(filename) as f: #opened file
     for row in reader: # creates a filled list for each header
         Row.append(row[0])
         Title.append(row[1])
-        Year.append(row[2])
+        Year.append(int(row[2]))
         Age.append(row[3])
         IMDb.append(row[4])
         RottenTomatoes.append(row[5])
@@ -108,3 +109,13 @@ averagesRT[0] = avg(RottenTomatoes, Netflix, counterNetflixRT, rtTotalNetflix)
 averagesRT[1] = avg(RottenTomatoes, Hulu, counterHuluRT, rtTotalHulu)
 averagesRT[2] = avg(RottenTomatoes, DisneyPlus, counterDisneyRT, rtTotalDisney)
 averagesRT[3] = avg(RottenTomatoes, PrimeVideo, counterPrimeVideoRT, rtTotalPrimeVideo)
+
+print(averagesIMDb)
+print (averagesRT)
+
+for i in range(len(averagesIMDb)):
+    averagesIMDb[i] = averagesIMDb[i] / 10
+    averagesRT[i] = averagesRT[i] / 100
+    averagesNormalized[i] = averagesIMDb[i] + averagesRT[i]
+
+print(averagesNormalized)
