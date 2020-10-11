@@ -93,7 +93,6 @@ def targetAudienceNormalized(streamingPlatform, age):  # returns count of shows 
         else:
             lenStreamingPlat -= 1
 
-    print(set(ageListStreamingPlatform))
     print("number of shows on platform: %s" % numShows)
     print("number of unrated shows on platform: %s" % numUnratedShows)
 
@@ -141,12 +140,6 @@ for i in range(len(Age)):
     if Age[i] == '' or Age[i] == 'all':
         continue
 
-
-for i in range(len(averagesIMDb)):
-    averagesIMDb[i] = averagesIMDb[i] / 10
-    averagesRT[i] = averagesRT[i] / 100
-    averagesNormalized[i] = averagesIMDb[i] + averagesRT[i]
-
 averagesIMDb[0] = avg(IMDb, Netflix, counterNetflixIMDb, imdbTotalNetflix)
 averagesIMDb[1] = avg(IMDb, Hulu, counterHuluIMDb, imdbTotalHulu)
 averagesIMDb[2] = avg(IMDb, DisneyPlus, counterDisneyRT, imdbTotalDisney)
@@ -157,11 +150,17 @@ averagesRT[1] = avg(RottenTomatoes, Hulu, counterHuluRT, rtTotalHulu)
 averagesRT[2] = avg(RottenTomatoes, DisneyPlus, counterDisneyRT, rtTotalDisney)
 averagesRT[3] = avg(RottenTomatoes, PrimeVideo, counterPrimeVideoRT, rtTotalPrimeVideo)
 
-ageSet = set(Age)
+for i in range(len(averagesIMDb)):
+    averagesIMDb[i] = averagesIMDb[i] / 10
+    averagesRT[i] = averagesRT[i] / 100
+    averagesNormalized[i] = averagesIMDb[i] + averagesRT[i]
 
-print(ageSet)
+print("Number of shows that age group can watch: %s" % targetAudienceNormalized(Netflix, 16))  # plugging in whatever age i want
+print("Number of shows that age group can watch: %s" % targetAudienceNormalized(PrimeVideo, 16))  # plugging in whatever age i want
+print("Number of shows that age group can watch: %s" % targetAudienceNormalized(DisneyPlus, 16))  # plugging in whatever age i want
+print("Number of shows that age group can watch: %s" % targetAudienceNormalized(Hulu, 16))  # plugging in whatever age i want
 
-print("Number of shows that age group can watch: %s" % targetAudienceNormalized(Netflix, 16))
-print("Number of shows that age group can watch: %s" % targetAudienceNormalized(PrimeVideo, 16))
-print("Number of shows that age group can watch: %s" % targetAudienceNormalized(DisneyPlus, 16))
-print("Number of shows that age group can watch: %s" % targetAudienceNormalized(Hulu, 16))
+print("\nFormat: [Netflix,  Hulu,  DisneyPlus, PrimeVideo]")
+print("Rotten Tomatoes Avgs: %s" % averagesRT)
+print("IMDb Avgs: %s" % averagesIMDb)
+print("Normalized (range: 0-2) Avgs: %s" % averagesNormalized)
